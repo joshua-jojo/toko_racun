@@ -77,15 +77,15 @@
             <div
                 class="flex flex-col content-between gap-6 p-5 min-h-screen max-h-screen w-full z-0"
             >
-                <div class="flex gap-2 items-center">
+                <div class="flex gap-2 justify-between items-center">
                     <div class="prose">
                         <h1>Penjualan</h1>
                     </div>
                     <label
                         @click="drawer_produk = !drawer_produk"
-                        class="btn btn-primary"
-                        ><i class="fa fa-cart-shopping"></i
-                    ></label>
+                        class="btn btn-primary gap-2"
+                        ><i class="fa fa-cart-shopping"></i>Pilih Produk</label
+                    >
                 </div>
                 <div class="w-full h-full overflow-auto">
                     <table
@@ -93,6 +93,7 @@
                     >
                         <thead>
                             <tr>
+                                <th>no</th>
                                 <th>Nama</th>
                                 <th>Jumlah</th>
                                 <th>Harga</th>
@@ -105,9 +106,46 @@
                                 v-for="(item, index) in list_pesanan"
                                 :key="index"
                             >
-                                <th>{{ item.nama }}</th>
-                                <td>{{ item.jumlah }}</td>
-                                <td>{{ rupiah(item.harga) }}</td>
+                                <th>{{ index + 1 }}</th>
+                                <td>{{ item.nama }}</td>
+                                <td>
+                                    <div
+                                        class="flex justify-center items-center gap-2"
+                                    >
+                                        <button
+                                            class="btn btn-xs"
+                                            @mousedown="
+                                                tambah_produk(item, true)
+                                            "
+                                            @mouseup="
+                                                tambah_produk(item, false)
+                                            "
+                                            @mouseleave="
+                                                tambah_produk(item, false)
+                                            "
+                                        >
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-ghost">
+                                            {{ item.jumlah }}
+                                        </button>
+                                        <button
+                                            class="btn btn-xs"
+                                            @mousedown="
+                                                kurang_produk(item, true)
+                                            "
+                                            @mouseup="
+                                                kurang_produk(item, false)
+                                            "
+                                            @mouseleave="
+                                                kurang_produk(item, false)
+                                            "
+                                        >
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>{{ rupiah(item.harga_jual) }}</td>
                                 <td>{{ rupiah(item.subtotal) }}</td>
                                 <td class="flex justify-center">
                                     <button
@@ -127,7 +165,10 @@
                     <div class="h-full w-full flex justify-center items-center">
                         <div
                             class="prose text-center"
-                            v-if="data_pesanan.bayar == 0"
+                            v-if="
+                                data_pesanan.bayar.nominal == 0 ||
+                                data_pesanan.kembalian < 0
+                            "
                         >
                             <h2 class="font-extrabold">TOTAL PEMBAYARAN</h2>
                             <h1 class="font-extrabold">
@@ -153,74 +194,42 @@
                             </h3>
                         </div>
                     </div>
-                    <table class="table-compact w-[28rem]">
+                    <table class="table-compact w-[28rem] table table-zebra">
                         <tbody>
                             <tr>
-                                <td
-                                    class="w-36 leading-3 capitalize text-lg font-bold"
-                                >
-                                    total
-                                </td>
-                                <td class="text-end leading-3 text-lg">
-                                    {{ rupiah(data_pesanan.total) }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    class="w-36 leading-3 capitalize text-lg font-bold"
-                                >
+                                <td class="w-36 leading-3 capitalize font-bold">
                                     diskon
                                 </td>
                                 <td class="text-end leading-3">
-                                    <label for="diskon" class="btn btn-sm">{{
+                                    <label for="diskon" class="btn btn-xs">{{
                                         rupiah(data_pesanan.diskon.final_diskon)
                                     }}</label>
                                 </td>
                             </tr>
                             <tr>
-                                <td
-                                    class="w-36 leading-3 capitalize text-lg font-bold"
-                                >
+                                <td class="w-36 leading-3 capitalize font-bold">
                                     PPN 11%
                                 </td>
-                                <td
-                                    class="text-end leading-3 text-lg font-bold"
-                                >
+                                <td class="text-end leading-3 font-bold">
                                     {{ rupiah(data_pesanan.ppn_total) }}
                                 </td>
                             </tr>
                             <tr>
-                                <td
-                                    class="w-36 leading-3 capitalize text-lg font-bold"
-                                >
+                                <td class="w-36 leading-3 capitalize font-bold">
                                     grand total
                                 </td>
-                                <td
-                                    class="text-end leading-3 text-lg font-bold"
-                                >
+                                <td class="text-end leading-3 font-bold">
                                     {{ rupiah(data_pesanan.grand_total) }}
                                 </td>
                             </tr>
                             <tr>
-                                <td
-                                    class="w-36 leading-3 capitalize text-lg font-bold"
-                                >
+                                <td class="w-36 leading-3 capitalize font-bold">
                                     bayar
                                 </td>
-                                <td class="text-end leading-3 text-lg">
-                                    <label for="bayar" class="btn btn-sm">{{
+                                <td class="text-end leading-3">
+                                    <label for="bayar" class="btn btn-xs">{{
                                         rupiah(data_pesanan.bayar.nominal)
                                     }}</label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    class="w-36 leading-3 capitalize text-lg font-bold"
-                                >
-                                    kembalian
-                                </td>
-                                <td class="text-end leading-3 text-lg">
-                                    {{ rupiah(data_pesanan.kembalian) }}
                                 </td>
                             </tr>
                         </tbody>
@@ -232,9 +241,11 @@
                     <transition name="produk">
                         <div
                             v-if="drawer_produk"
-                            class="bg-white z-10 w-[45rem] min-h-screen max-h-screen overflow-hidden flex flex-col gap-2"
+                            class="bg-white z-10 w-[35rem] min-h-screen max-h-screen overflow-hidden flex flex-col gap-2"
                         >
-                            <div class="flex justify-between p-2">
+                            <div
+                                class="flex justify-between flex-row-reverse p-2"
+                            >
                                 <input
                                     type="text"
                                     class="input input-bordered"
@@ -262,7 +273,7 @@
                                             :key="index"
                                             @click="
                                                 item.stok > 0
-                                                    ? get_produk(item)
+                                                    ? get_produk(item, index)
                                                     : ''
                                             "
                                         >
@@ -274,7 +285,7 @@
                                             <td
                                                 class="group-hover:bg-primary group-hover:text-white"
                                             >
-                                                {{ rupiah(item.harga) }}
+                                                {{ rupiah(item.harga_jual) }}
                                             </td>
                                             <td
                                                 class="group-hover:bg-primary group-hover:text-white"
@@ -401,28 +412,42 @@ export default {
         user: Object,
     },
     watch: {
+        "data_pesanan.diskon.tipe_diskon"() {
+            this.data_pesanan.diskon.input_diskon = 0;
+            this.data_pesanan.diskon.final_diskon = 0;
+        },
         "data_pesanan.diskon.input_diskon"() {
             const { tipe_diskon, input_diskon } = this.data_pesanan.diskon;
             const { total } = this.data_pesanan;
+
             if (tipe_diskon == "persen") {
-                if (input_diskon >= 0 && input_diskon <= 100) {
-                    this.data_pesanan.diskon.final_diskon =
-                        total * (input_diskon / 100);
-                } else {
-                    this.data_pesanan.diskon.input_diskon = 0;
+                if (input_diskon < 0 || input_diskon == "") {
+                    this.data_pesanan.diskon.input_diskon = "";
+                } else if (input_diskon > 100) {
+                    this.data_pesanan.diskon.input_diskon = 100;
                 }
+                this.data_pesanan.diskon.final_diskon =
+                    (total *
+                        (this.data_pesanan.diskon.input_diskon != ""
+                            ? this.data_pesanan.diskon.input_diskon
+                            : 0)) /
+                    100;
             } else if (tipe_diskon == "rupiah") {
-                if (input_diskon >= 0 && input_diskon <= total) {
-                    this.data_pesanan.diskon.final_diskon = input_diskon;
-                } else {
-                    this.data_pesanan.diskon.input_diskon = 0;
-                }
+                this.data_pesanan.diskon.final_diskon =
+                    input_diskon == "" || input_diskon < 0
+                        ? 0
+                        : input_diskon > total
+                        ? (total,
+                          (this.data_pesanan.diskon.input_diskon = total))
+                        : input_diskon;
             }
         },
     },
     data() {
         return {
             cari_produk: "",
+            press: null,
+            cek: null,
             drawer_produk: false,
             data_pesanan: {
                 produk: [],
@@ -454,6 +479,75 @@ export default {
         };
     },
     methods: {
+        async tambah_produk(data, status) {
+            await clearTimeout(this.cek);
+            await clearInterval(this.press);
+
+            var produk = await this.produk.find((item) => {
+                if (data.id == item.id) {
+                    return item;
+                }
+            });
+
+            if (status) {
+                if (produk.stok > 0) {
+                    data.jumlah++;
+                    produk.stok--;
+                } else {
+                    this.sweet_alert({
+                        icon: "warning",
+                        title: data.nama,
+                        text: "Pesanan telah mencapai batas",
+                    });
+                }
+                this.cek = setTimeout(() => {
+                    this.press = setInterval(() => {
+                        if (produk.stok > 0) {
+                            data.jumlah++;
+                            produk.stok--;
+                        } else {
+                            this.sweet_alert({
+                                icon: "warning",
+                                title: data.nama,
+                                text: "Pesanan telah mencapai batas",
+                            });
+                        }
+                    }, 100);
+                }, 500);
+            }
+        },
+        async kurang_produk(data, status) {
+            await clearTimeout(this.cek);
+            await clearInterval(this.press);
+
+            var produk = await this.produk.find((item) => {
+                if (data.id == item.id) {
+                    return item;
+                }
+            });
+
+            if (status) {
+                if (data.jumlah > 1) {
+                    data.jumlah--;
+                    produk.stok++;
+                } else {
+                    this.sweet_alert("Minimal belanja 1 item");
+                }
+                this.cek = setTimeout(() => {
+                    this.press = setInterval(() => {
+                        if (data.jumlah > 1) {
+                            data.jumlah--;
+                            produk.stok++;
+                        } else {
+                            this.sweet_alert("Minimal belanja 1 item");
+                        }
+                    }, 100);
+                }, 500);
+            }
+        },
+        sweet_alert(data) {
+            this.$swal.fire(data);
+        },
         button(data) {
             if (data == "pas") {
                 this.data_pesanan.bayar.nominal = this.data_pesanan.grand_total;
@@ -528,11 +622,14 @@ export default {
             });
             this.data_pesanan.produk.splice(id_index, 1);
         },
-        get_produk(data) {
+        get_produk(data, index) {
+            this.drawer_produk = false;
             if (this.data_pesanan.produk.length < 1) {
+                data.index_produk = index;
                 this.data_pesanan.produk.push(data);
             } else {
                 var cek = true;
+                data.index_produk = index;
                 this.data_pesanan.produk.find((item) => {
                     if (item.id == data.id) {
                         item.jumlah++;
@@ -557,16 +654,26 @@ export default {
         list_pesanan() {
             var total = 0;
             this.data_pesanan.produk.forEach((element) => {
-                element.subtotal = element.jumlah * element.harga;
+                element.subtotal = element.jumlah * element.harga_jual;
                 total += element.subtotal;
             });
 
+            // total
             this.data_pesanan.total = total;
-            this.data_pesanan.ppn_total = (total * this.data_pesanan.ppn) / 100;
+
+            // ppn total
+            this.data_pesanan.ppn_total =
+                ((total - this.data_pesanan.diskon.final_diskon) *
+                    this.data_pesanan.ppn) /
+                100;
+
+            // grand_total
             this.data_pesanan.grand_total =
                 total +
                 this.data_pesanan.ppn_total -
                 this.data_pesanan.diskon.final_diskon;
+
+            // kembalian
             this.data_pesanan.kembalian =
                 this.data_pesanan.bayar.nominal - this.data_pesanan.grand_total;
 
@@ -575,6 +682,7 @@ export default {
                 this.data_pesanan.diskon.final_diskon = 0;
                 this.data_pesanan.diskon.input_diskon = 0;
                 this.data_pesanan.grand_total = 0;
+                this.data_pesanan.ppn_total = 0;
                 this.data_pesanan.kembalian = 0;
                 this.data_pesanan.bayar.nominal = 0;
             }

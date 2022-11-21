@@ -3,10 +3,14 @@
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PemasukkanController;
+use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,6 +38,9 @@ Route::group(['middleware' => ['login', 'lock_mode']], function () {
     Route::resource('penjualan', PenjualanController::class);
     Route::resource('transaksi', TransaksiController::class);
     Route::resource('pengeluaran', PengeluaranController::class);
+    Route::resource('pembelian', PembelianController::class);
+    Route::resource('member', MemberController::class);
+    Route::resource('supplier', SupplierController::class);
 });
 
 Route::prefix('auth')->group(function () {

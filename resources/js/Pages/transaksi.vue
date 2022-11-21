@@ -74,10 +74,13 @@
                             <td>{{ item.waktu }}</td>
                             <td>{{ item.kode_transaksi }}</td>
                             <td>{{ item.jenis_pembayaran }}</td>
-                            <td>{{ item.grand_total }}</td>
+                            <td>{{ rupiah(item.grand_total) }}</td>
                             <td>
                                 <div class="flex justify-center gap-2">
-                                    <label class="btn btn-sm btn-info">
+                                    <label
+                                        class="btn btn-sm btn-info"
+                                        for="detail"
+                                    >
                                         <i class="fa fa-list"></i>
                                     </label>
                                 </div>
@@ -102,6 +105,21 @@
             </div>
         </template>
     </navbar>
+    <modal-lg id="detail">
+        <template v-slot:title>defaultcontent</template>
+        <template v-slot:content>
+            <div class="h-full w-full flex flex-col">
+                <table class="w-max">
+                    <tbody>
+                        <tr>
+                            <td>Kode Transaksi</td>
+                            <td>: 2343</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+    </modal-lg>
 </template>
 <script>
 export default {

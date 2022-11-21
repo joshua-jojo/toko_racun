@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('produks', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->bigInteger('harga');
+            $table->bigInteger('harga_jual');
+            $table->bigInteger('harga_beli');
             $table->bigInteger('stok');
             $table->foreignId('kategori_id')->references('id')->on('kategoris')->delete('cascade');
             $table->foreignId('satuan_id')->references('id')->on('satuans')->delete('cascade');

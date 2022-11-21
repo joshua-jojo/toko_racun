@@ -43,7 +43,8 @@
                         <tr>
                             <th>Nama</th>
                             <th>kategori</th>
-                            <th>harga</th>
+                            <th>harga beli</th>
+                            <th>harga jual</th>
                             <th>stok</th>
                             <th>satuan</th>
                             <th>opsi</th>
@@ -57,7 +58,8 @@
                                     item.kategori ? item.kategori.kategori : ""
                                 }}
                             </td>
-                            <td>{{ rupiah(item.harga) }}</td>
+                            <td>{{ rupiah(item.harga_beli) }}</td>
+                            <td>{{ rupiah(item.harga_jual) }}</td>
                             <td>{{ item.stok }}</td>
                             <td>{{ item.satuan ? item.satuan.satuan : "" }}</td>
                             <td class="flex justify-center gap-2">
@@ -163,20 +165,40 @@
             <div class="form-control w-full">
                 <label class="label">
                     <span class="label-text"
-                        >Harga : {{ rupiah(tambah.harga) }}</span
+                        >Harga Beli : {{ rupiah(tambah.harga_beli) }}</span
                     >
                 </label>
                 <input
                     type="number"
-                    v-model="tambah.harga"
-                    placeholder="Harga..."
+                    v-model="tambah.harga_beli"
+                    placeholder="Harga Beli..."
                     class="input input-bordered w-full"
                 />
                 <label class="label">
                     <span
                         class="label-text-alt text-error"
-                        v-if="tambah.errors.harga"
-                        >{{ tambah.errors.harga }}</span
+                        v-if="tambah.errors.harga_beli"
+                        >{{ tambah.errors.harga_beli }}</span
+                    >
+                </label>
+            </div>
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text"
+                        >Harga Jual : {{ rupiah(tambah.harga_jual) }}</span
+                    >
+                </label>
+                <input
+                    type="number"
+                    v-model="tambah.harga_jual"
+                    placeholder="Harga Jual..."
+                    class="input input-bordered w-full"
+                />
+                <label class="label">
+                    <span
+                        class="label-text-alt text-error"
+                        v-if="tambah.errors.harga_jual"
+                        >{{ tambah.errors.harga_jual }}</span
                     >
                 </label>
             </div>
@@ -277,20 +299,40 @@
             <div class="form-control w-full">
                 <label class="label">
                     <span class="label-text"
-                        >Harga : {{ rupiah(edit.harga) }}</span
+                        >Harga : {{ rupiah(edit.harga_beli) }}</span
                     >
                 </label>
                 <input
                     type="number"
-                    v-model="edit.harga"
-                    placeholder="Harga..."
+                    v-model="edit.harga_beli"
+                    placeholder="Harga Beli..."
                     class="input input-bordered w-full"
                 />
                 <label class="label">
                     <span
                         class="label-text-alt text-error"
-                        v-if="edit.errors.harga"
-                        >{{ edit.errors.harga }}</span
+                        v-if="edit.errors.harga_beli"
+                        >{{ edit.errors.harga_beli }}</span
+                    >
+                </label>
+            </div>
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text"
+                        >Harga : {{ rupiah(edit.harga_jual) }}</span
+                    >
+                </label>
+                <input
+                    type="number"
+                    v-model="edit.harga_jual"
+                    placeholder="Harga Jual..."
+                    class="input input-bordered w-full"
+                />
+                <label class="label">
+                    <span
+                        class="label-text-alt text-error"
+                        v-if="edit.errors.harga_jual"
+                        >{{ edit.errors.harga_jual }}</span
                     >
                 </label>
             </div>
@@ -358,7 +400,8 @@ export default {
         const tambah = useForm({
             nama: null,
             kategori_id: null,
-            harga: null,
+            harga_beli: null,
+            harga_jual: null,
             stok: null,
             satuan_id: null,
         });
@@ -366,7 +409,8 @@ export default {
             id: null,
             nama: null,
             kategori_id: null,
-            harga: null,
+            harga_beli: null,
+            harga_jual: null,
             stok: null,
             satuan_id: null,
         });
@@ -396,7 +440,8 @@ export default {
             this.edit.kategori_id = data.kategori_id;
             this.edit.satuan_id = data.satuan_id;
             this.edit.stok = data.stok;
-            this.edit.harga = data.harga;
+            this.edit.harga_beli = data.harga_beli;
+            this.edit.harga_jual = data.harga_jual;
         },
         submit_hapus() {
             const { id } = this.hapus;

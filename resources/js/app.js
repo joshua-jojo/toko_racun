@@ -16,6 +16,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 
 import navbar from "./Pages/Layout/navbar.vue";
 import ModalMd from "./Pages/Component/modal-md.vue";
+import ModalLg from "./Pages/Component/modal-lg.vue";
 import { Inertia } from "@inertiajs/inertia";
 
 const appName =
@@ -38,13 +39,14 @@ createInertiaApp({
             .component("Navbar", navbar)
             .component("Head", Head)
             .component("modal-md", ModalMd)
+            .component("modal-lg", ModalLg)
             .component("Link", Link)
             .mixin({
                 props: {
                     user: Object,
                     cari: String,
                     show: Number,
-                    range: Array,
+                    range: Object,
                 },
                 data() {
                     return {
@@ -76,9 +78,55 @@ createInertiaApp({
                             }
                         );
                     },
+                    get_member() {
+                        Inertia.get(
+                            route("member.index", {
+                                cari: this.input_cari,
+                                show: this.input_show,
+                            }),
+                            {
+                                preserveScroll: true,
+                            }
+                        );
+                    },
+                    get_supplier() {
+                        Inertia.get(
+                            route("supplier.index", {
+                                cari: this.input_cari,
+                                show: this.input_show,
+                            }),
+                            {
+                                preserveScroll: true,
+                            }
+                        );
+                    },
                     get_transaksi() {
                         Inertia.get(
                             route("transaksi.index", {
+                                cari: this.input_cari,
+                                show: this.input_show,
+                                range: this.input_range,
+                            }),
+                            {
+                                preserveScroll: true,
+                            }
+                        );
+                    },
+                    get_pengeluaran() {
+                        Inertia.get(
+                            route("pengeluaran.index", {
+                                cari: this.input_cari,
+                                show: this.input_show,
+                                range: this.input_range,
+                            }),
+                            {
+                                preserveScroll: true,
+                            }
+                        );
+                    },
+                    get_pembelian() {
+                        Inertia.get(
+                            route("pembelian.index", {
                                 cari: this.input_cari,
                                 show: this.input_show,
                                 range: this.input_range,

@@ -1,8 +1,8 @@
 <template lang="">
-    <navbar header>
+    <navbar header :success="success">
         <template v-slot:title>Pengeluaran</template>
         <template v-slot:title_left>
-            <label class="btn btn-sm btn-success">
+            <label for="tambah" class="btn btn-sm btn-success">
                 <i class="fa fa-plus"></i>
             </label>
         </template>
@@ -19,7 +19,7 @@
                             />
                             <button
                                 class="btn btn-square"
-                                @click="get_transaksi()"
+                                @click="get_pengeluaran()"
                             >
                                 <i class="fa fa-search"></i>
                             </button>
@@ -29,7 +29,7 @@
                         <div class="flex gap-1">
                             <label class="label">Dari</label>
                             <input
-                                @change="get_transaksi"
+                                @change="get_pengeluaran"
                                 type="date"
                                 class="input input-bordered"
                                 v-model="input_range.dari"
@@ -38,7 +38,7 @@
                         <div class="flex gap-1">
                             <label class="label">Sampai</label>
                             <input
-                                @change="get_transaksi"
+                                @change="get_pengeluaran"
                                 type="date"
                                 class="input input-bordered"
                                 v-model="input_range.sampai"
@@ -50,7 +50,7 @@
                         <select
                             class="w-max select select-bordered"
                             v-model="input_show"
-                            @change="get_transaksi()"
+                            @change="get_pengeluaran()"
                         >
                             <option value="5">5</option>
                             <option value="10">10</option>
@@ -65,9 +65,8 @@
                     <thead>
                         <tr>
                             <td>Tanggal</td>
-                            <td>Keterangan</td>
                             <td>Nominal</td>
-                            <td>Action</td>
+                            <td>Keterangan</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,9 +75,7 @@
                             :key="index"
                         >
                             <td>{{ item.waktu }}</td>
-                            <td>{{ item.kode_transaksi }}</td>
-                            <td>{{ item.jenis_pembayaran }}</td>
-                            <td>{{ item.grand_total }}</td>
+                            <td>{{ rupiah(item.nominal) }}</td>
                             <td>
                                 <div class="flex justify-center gap-2">
                                     <label class="btn btn-sm btn-info">
@@ -106,11 +103,96 @@
             </div>
         </template>
     </navbar>
+    <modal-md id="tambah">
+        <template v-slot:title>Tambah Pengeluaran</template>
+        <template v-slot:content>
+            <div class="flex gap-2">
+                <div class="form-control w-max">
+                    <label class="label"> Tanggal </label>
+                    <input
+                        type="date"
+                        class="input input-bordered"
+                        v-model="tambah.tanggal"
+                    />
+                    <label
+                        v-if="tambah.errors.tanggal"
+                        class="label-text text-red-500"
+                    >
+                        {{ tambah.errors.tanggal }}</label
+                    >
+                </div>
+                <div class="form-control w-full">
+                    <label class="label">
+                        Nominal : {{ rupiah(tambah.nominal) }}</label
+                    >
+                    <input
+                        type="number"
+                        class="input input-bordered"
+                        placeholder="nominal..."
+                        v-model="tambah.nominal"
+                    />
+                    <label
+                        v-if="tambah.errors.nominal"
+                        class="label-text text-red-500"
+                    >
+                        {{ tambah.errors.nominal }}</label
+                    >
+                </div>
+            </div>
+            <div class="form-control">
+                <label class="label"> Keterangan</label>
+                <textarea
+                    v-model="tambah.keterangan"
+                    class="textarea textarea-bordered"
+                    placeholder="keterangan"
+                ></textarea>
+                <label
+                    v-if="tambah.errors.keterangan"
+                    class="label-text text-red-500"
+                >
+                    {{ tambah.errors.keterangan }}</label
+                >
+            </div>
+        </template>
+        <template v-slot:action>
+            <button
+                class="btn btn-success"
+                @click="submit_tambah"
+                :disabled="tambah.processing"
+                :class="{ loading: tambah.processing }"
+            >
+                Simpan
+            </button>
+        </template>
+    </modal-md>
 </template>
 <script>
+import { useForm } from "@inertiajs/inertia-vue3";
+
 export default {
     props: {
         pengeluaran: Object,
+    },
+    setup() {
+        const tambah = useForm({
+            tanggal: null,
+            nominal: null,
+            keterangan: null,
+        });
+        return {
+            tambah,
+        };
+    },
+    methods: {
+        submit_tambah() {
+            this.tambah.post(route("pengeluaran.store"), {
+                onSuccess: () => {
+                    this.close_modal("tambah");
+                    this.notifikasi("Pengeluaran Berhasil Ditambahkan");
+                    this.tambah.reset();
+                },
+            });
+        },
     },
 };
 </script>

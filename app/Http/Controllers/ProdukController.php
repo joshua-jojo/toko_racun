@@ -20,8 +20,9 @@ class ProdukController extends Controller
         $cari = $request->cari ?: '';
         $show = $request->show ?: 5;
         $produk = Produk::with(['kategori', 'satuan'])->where('nama', 'like', '%' . $cari . '%')
-            ->orWhere('harga','like', '%' . $cari . '%')
-            ->orWhere('stok','like', '%' . (int) $cari . '%')
+            ->orWhere('harga_jual', 'like', '%' . $cari . '%')
+            ->orWhere('harga_beli', 'like', '%' . $cari . '%')
+            ->orWhere('stok', 'like', '%' . (int) $cari . '%')
             ->orWhereHas('kategori', function ($q) use ($cari) {
                 $q->where('kategori', 'like', '%' . $cari . '%');
             })
@@ -56,8 +57,9 @@ class ProdukController extends Controller
             'nama' => 'required|min:3|unique:produks',
             'kategori_id' => 'required',
             'satuan_id' => 'required',
-            'stok' => 'required|numeric|min:1',
-            'harga' => 'required|numeric|min:0',
+            'stok' => 'required|numeric|min:0',
+            'harga_jual' => 'required|numeric|min:0',
+            'harga_beli' => 'required|numeric|min:0',
         ]);
         Produk::create($data);
     }
@@ -97,8 +99,9 @@ class ProdukController extends Controller
             'nama' => 'required|min:3',
             'kategori_id' => 'required',
             'satuan_id' => 'required',
-            'stok' => 'required|numeric|min:1',
-            'harga' => 'required|numeric|min:0',
+            'stok' => 'required|numeric|min:0',
+            'harga_jual' => 'required|numeric|min:0',
+            'harga_beli' => 'required|numeric|min:0',
         ]);
         $data['nama'] == $produk->nama ? $produk->nama : $request->validate(['nama' => 'unique:produks']);
         $produk->update($data);
