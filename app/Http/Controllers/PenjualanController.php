@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\Produk;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -16,14 +17,15 @@ class PenjualanController extends Controller
      */
     public function index()
     {
-        $produk = Produk::orderBy('nama','asc')->get()->map(
-            function ($q){
+        $produk = Produk::orderBy('nama', 'asc')->get()->map(
+            function ($q) {
                 $q->jumlah = 1;
                 $q->subtotal = $q->harga;
                 return $q;
             }
         );
-        return Inertia::render('penjualan',['produk' => $produk]);
+        $member = Member::all();
+        return Inertia::render('penjualan', ['produk' => $produk, 'member' => $member]);
     }
 
     /**

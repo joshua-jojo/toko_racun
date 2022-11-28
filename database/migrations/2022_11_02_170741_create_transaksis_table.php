@@ -26,6 +26,9 @@ return new class extends Migration
             $table->string('no_transaksi')->nullable();
             $table->bigInteger('bayar');
             $table->bigInteger('kembalian');
+            $table->bigInteger('member_id');
+            $table->string('nama_member');
+            $table->string('status');
             $table->timestamps();
             $table->softDeletes();
         });

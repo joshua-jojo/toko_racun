@@ -47,7 +47,6 @@ class MemberController extends Controller
             'nama' => 'required|unique:members',
             'alamat' => 'required',
             'telp' => 'required',
-            'diskon' => 'required|numeric|min:0|max:100',
         ]);
         Member::create($data);
     }

@@ -64,24 +64,6 @@
                             >
                         </label>
                     </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">Diskon</span>
-                        </label>
-                        <input
-                            type="number"
-                            placeholder="Diskon"
-                            v-model="tambah.diskon"
-                            class="input input-bordered w-full"
-                        />
-                        <label class="label">
-                            <span
-                                class="label-text-alt text-error"
-                                v-if="tambah.errors.diskon"
-                                >{{ tambah.errors.diskon }}</span
-                            >
-                        </label>
-                    </div>
                 </template>
                 <template v-slot:action>
                     <button
@@ -137,7 +119,6 @@
                             <td>Nama</td>
                             <td>Alamat</td>
                             <td>Telp</td>
-                            <td>Diskon</td>
                             <td>aksi</td>
                         </tr>
                     </thead>
@@ -146,7 +127,6 @@
                             <td>{{ item.nama }}</td>
                             <td>{{ item.alamat }}</td>
                             <td>{{ item.telp }}</td>
-                            <td>{{ item.diskon }}%</td>
                             <td>
                                 <div class="flex justify-center gap-2">
                                     <label
@@ -241,24 +221,6 @@
                         class="label-text-alt text-error"
                         v-if="edit.errors.alamat"
                         >{{ edit.errors.alamat }}</span
-                    >
-                </label>
-            </div>
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">Diskon</span>
-                </label>
-                <input
-                    type="number"
-                    placeholder="Diskon"
-                    v-model="edit.diskon"
-                    class="input input-bordered w-full"
-                />
-                <label class="label">
-                    <span
-                        class="label-text-alt text-error"
-                        v-if="edit.errors.diskon"
-                        >{{ edit.errors.diskon }}</span
                     >
                 </label>
             </div>

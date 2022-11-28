@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('transaksi_id');
             $table->string('nama');
             $table->bigInteger('jumlah');
-            $table->bigInteger('harga');
+            $table->bigInteger('harga_jual');
             $table->bigInteger('subtotal');
             $table->timestamps();
             $table->softDeletes();

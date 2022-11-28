@@ -33,6 +33,8 @@ class TransaksiController extends Controller
             ->orWhere('kode_transaksi', 'like', '%' . $cari . '%')
             ->orWhere('jenis_pembayaran', 'like', '%' . $cari . '%')
             ->orWhere('grand_total', 'like', '%' . $cari . '%')
+            ->orWhere('nama_member', 'like', '%' . $cari . '%')
+            ->orWhere('status', 'like', '%' . $cari . '%')
             ->latest()
             ->paginate($show)
             ->withQueryString();
@@ -63,6 +65,30 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
+        $member = $request['data_transkasi']['member'];
+        if ($member['id'] != 0) {
+            $data_transaksi = Transaksi::latest()->where("nama_member", $member['nama'])->first();
+            if ($data_transaksi != null) {
+                $final = [
+                    'total' => $data_transaksi->total += $request->data_transkasi['total'],
+                    'ppn_total' => $data_transaksi->ppn_total += $request->data_transkasi['ppn_total'],
+                    'diskon' => $data_transaksi->diskon += $request->data_transkasi['diskon']['final_diskon'],
+                    'grand_total' => $data_transaksi->grand_total += $request->data_transkasi['grand_total'],
+                    'kembalian' => $data_transaksi->kembalian += $request->data_transkasi['kembalian'],
+                    'jenis_pembayaran' => $request->data_transkasi['bayar']['jenis_pembayaran'],
+                    'no_transaksi' => $request->data_transkasi['bayar']['no_transaksi']
+
+                ];
+                $final['status'] = $final['kembalian'] < 0 ? "belum lunas" : 'lunas';
+                $data_transaksi->update($final);
+                foreach ($request->data_transkasi['produk'] as $key => $value) {
+                    Produk::find($value['id'])->update($value);
+                    $value['transaksi_id'] = $data_transaksi->id;
+                    $value['created_at'] = date('Y-m-d H:i:s');
+                    TransaksiDetail::create($value);
+                }
+            }
+        }
         $master = $request->data_transkasi;
         $master_transaksi = Transaksi::latest();
 
@@ -88,9 +114,12 @@ class TransaksiController extends Controller
             'no_transaksi' => $master['bayar']['no_transaksi'],
             'bayar' => $master['bayar']['nominal'],
             'kembalian' => $master['kembalian'],
+            'status' => $master['kembalian'] < 0 ? "belum lunas" : "lunas",
+            'member_id' => $member['id'],
+            'nama_member' => $member['nama'],
         ])->id;
 
-        $transaksi_detail = collect($master['produk'])->map(
+        collect($master['produk'])->map(
             function ($q) use ($id) {
                 $q['transaksi_id'] = $id;
                 $q['created_at'] = date('Y-m-d H:i:s');
@@ -117,9 +146,7 @@ class TransaksiController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Transaksi $transaksi)
-    {
-        //
-    }
+    { }
 
     /**
      * Update the specified resource in storage.
@@ -130,7 +157,15 @@ class TransaksiController extends Controller
      */
     public function update(Request $request, Transaksi $transaksi)
     {
-        //
+        $final = [
+            'jenis_pembayaran' => $request->lunas['jenis_pembayaran'],
+            'no_transaksi' => $request->lunas['no_transaksi'],
+            'kembalian' => ($transaksi->bayar + $request->lunas['nominal']) - $request->grand_total,
+            'bayar' => $request->lunas['nominal'] + $transaksi->bayar,
+        ];
+        $final['status'] = $final['bayar'] < 0 ? 'belum lunas' : 'lunas';
+        // dd($final, $request->all());
+        $transaksi->update($final);
     }
 
     /**

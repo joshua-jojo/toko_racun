@@ -224,6 +224,16 @@
                             </tr>
                             <tr>
                                 <td class="w-36 leading-3 capitalize font-bold">
+                                    member
+                                </td>
+                                <td class="text-end leading-3">
+                                    <label for="member" class="btn btn-xs">{{
+                                        data_pesanan.member.nama
+                                    }}</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-36 leading-3 capitalize font-bold">
                                     bayar
                                 </td>
                                 <td class="text-end leading-3">
@@ -368,6 +378,15 @@
         </template>
         <template v-slot:action>
             <button
+                v-if="data_pesanan.member.id != 0"
+                class="btn btn-success font-extrabold"
+                :disabled="data_pesanan.produk.length < 1"
+                @click="push_pesanan"
+            >
+                Proses
+            </button>
+            <button
+                v-else
                 class="btn btn-success font-extrabold"
                 :disabled="
                     data_pesanan.kembalian < 0 || data_pesanan.produk.length < 1
@@ -402,6 +421,63 @@
             </div>
         </template>
     </modal-md>
+    <modal-md id="member">
+        <template v-slot:title>Pilih Member</template>
+        <template v-slot:content>
+            <div class="w-full flex flex-col gap-3">
+                <div class="w-full flex justify-between">
+                    <input
+                        type="text"
+                        class="input input-bordered input-sm"
+                        placeholder="Nama Member"
+                        v-model="cari_member"
+                    />
+                    <label class="btn btn-sm" for="member">Close</label>
+                </div>
+                <div class="w-full">
+                    <table
+                        class="table table-compact table-zebra w-full text-center"
+                    >
+                        <thead>
+                            <tr>
+                                <th>nama</th>
+                                <th>action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tidak Ada Member</td>
+                                <td>
+                                    <button
+                                        @click="
+                                            get_member({
+                                                id: 0,
+                                                nama: 'non-member',
+                                            })
+                                        "
+                                        class="btn btn-info btn-sm"
+                                    >
+                                        Pilih
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr v-for="item in list_member">
+                                <td>{{ item.nama }}</td>
+                                <td>
+                                    <button
+                                        @click="get_member(item)"
+                                        class="btn btn-info btn-sm"
+                                    >
+                                        Pilih
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </template>
+    </modal-md>
 </template>
 <script>
 import { useForm } from "@inertiajs/inertia-vue3";
@@ -409,6 +485,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 export default {
     props: {
         produk: Object,
+        member: Array,
         user: Object,
     },
     watch: {
@@ -446,6 +523,7 @@ export default {
     data() {
         return {
             cari_produk: "",
+            cari_member: "",
             press: null,
             cek: null,
             drawer_produk: false,
@@ -455,6 +533,10 @@ export default {
                 jumlah: 0,
                 ppn: 11,
                 ppn_total: 0,
+                member: {
+                    id: 0,
+                    nama: "non-member",
+                },
                 diskon: {
                     tipe_diskon: "persen",
                     input_diskon: 0,
@@ -479,6 +561,11 @@ export default {
         };
     },
     methods: {
+        async get_member(data) {
+            this.data_pesanan.member.id = await data.id;
+            this.data_pesanan.member.nama = await data.nama;
+            await document.getElementById("member").click();
+        },
         async tambah_produk(data, status) {
             await clearTimeout(this.cek);
             await clearInterval(this.press);
@@ -606,6 +693,10 @@ export default {
                             no_transaksi: "",
                             nominal: null,
                         },
+                        member: {
+                            id: 0,
+                            nama: "non-member",
+                        },
                         kembalian: 0,
                     };
                 },
@@ -644,6 +735,17 @@ export default {
         },
     },
     computed: {
+        list_member() {
+            return this.member.filter((item) => {
+                if (
+                    item.nama
+                        .toLowerCase()
+                        .includes(this.cari_member.toLowerCase())
+                ) {
+                    return item;
+                }
+            });
+        },
         list_produk() {
             return this.produk.filter((produk) => {
                 return produk.nama
