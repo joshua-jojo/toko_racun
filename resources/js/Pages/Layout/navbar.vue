@@ -29,7 +29,7 @@
             </div>
             <div class="navbar-center hidden lg:flex">
                 <ul class="menu menu-horizontal p-0 capitalize gap-2">
-                    <Link :href="route('dashboard')">
+                    <Link :href="route('dashboard.index')">
                         <li>
                             <a
                                 :class="{

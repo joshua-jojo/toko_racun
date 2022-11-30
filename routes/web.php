@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MemberController;
@@ -27,10 +28,12 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/', function () {
+    return redirect()->route('dashboard.index');
+});
+
 Route::group(['middleware' => ['login', 'lock_mode']], function () {
-    Route::get('/', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::resource('dashboard', DashboardController::class);
 
     Route::resource('satuan', SatuanController::class);
     Route::resource('kategori', KategoriController::class);

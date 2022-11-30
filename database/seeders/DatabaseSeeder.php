@@ -22,10 +22,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            SatuanSeeder::class,
-            MemberSeeder::class,
-            SupplierSeeder::class,
-            TokoSeeder::class,
+            // SatuanSeeder::class,
+            // MemberSeeder::class,
+            // SupplierSeeder::class,
+            // TokoSeeder::class,
+            DummySeeder::class,
         ]);
     }
 }
