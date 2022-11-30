@@ -1,5 +1,5 @@
 <template lang="">
-    <Navbar :user="user">
+    <Navbar :toko="toko" :user="user">
         <template v-slot:content></template>
     </Navbar>
 </template>
@@ -7,6 +7,7 @@
 export default {
     props: {
         user: Object,
+        toko: Object,
     },
 };
 </script>

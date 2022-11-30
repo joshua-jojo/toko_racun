@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             SatuanSeeder::class,
             MemberSeeder::class,
             SupplierSeeder::class,
+            TokoSeeder::class,
         ]);
     }
 }

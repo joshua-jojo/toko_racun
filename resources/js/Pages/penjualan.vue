@@ -1,4 +1,11 @@
 <template lang="">
+    <Head>
+        <title>
+            {{
+                `${$inertia.page.component.toUpperCase()} | ${toko.nama.toUpperCase()}`
+            }}
+        </title>
+    </Head>
     <div class="flex min-h-screen">
         <div
             class="z-30 bg-base-100 w-20 flex flex-col p-2 gap-2 h-screen shadow-md"
@@ -487,6 +494,7 @@ export default {
         produk: Object,
         member: Array,
         user: Object,
+        toko: Object,
     },
     watch: {
         "data_pesanan.diskon.tipe_diskon"() {

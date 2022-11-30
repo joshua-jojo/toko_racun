@@ -1,6 +1,5 @@
 <template lang="">
-    <title>123</title>
-    <navbar header :success="success">
+    <navbar :toko="toko" header :success="success" :user="user">
         <template v-slot:title>Kategori</template>
         <template v-slot:title_left>
             <label for="tambah" class="btn btn-sm btn-success">
@@ -19,10 +18,18 @@
                     <tr v-for="(item, index) in kategori" :key="index">
                         <td>{{ item.kategori }}</td>
                         <td class="flex justify-center gap-2">
-                            <label for="list" class="btn btn-sm btn-info" @click="get_kategori(item)">
+                            <label
+                                for="list"
+                                class="btn btn-sm btn-info"
+                                @click="get_kategori(item)"
+                            >
                                 <i class="fa fa-list"></i>
                             </label>
-                            <label for="hapus" class="btn btn-sm btn-error" @click="get_kategori(item)">
+                            <label
+                                for="hapus"
+                                class="btn btn-sm btn-error"
+                                @click="get_kategori(item)"
+                            >
                                 <i class="fa fa-trash"></i>
                             </label>
                         </td>
@@ -31,7 +38,7 @@
             </table>
         </template>
     </navbar>
-    
+
     <modal-md id="list">
         <template v-slot:title>Daftar Produk</template>
         <template v-slot:content>
@@ -44,8 +51,8 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in hapus.produk">
-                        <td>{{item.nama}}</td>
-                        <td>{{item.kategori.kategori}}</td>
+                        <td>{{ item.nama }}</td>
+                        <td>{{ item.kategori.kategori }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -107,6 +114,8 @@ import { useForm } from "@inertiajs/inertia-vue3";
 export default {
     props: {
         kategori: Array,
+        user: Object,
+        toko: Object,
     },
     setup(props) {
         const tambah = useForm({
@@ -123,29 +132,32 @@ export default {
         };
     },
     methods: {
-        get_kategori(data){
-            this.hapus.id = data.id
-            this.hapus.kategori = data.kategori
-            this.hapus.produk = data.produk
+        get_kategori(data) {
+            this.hapus.id = data.id;
+            this.hapus.kategori = data.kategori;
+            this.hapus.produk = data.produk;
         },
-        submit_hapus(){
-            const {id} = this.hapus
-            this.hapus.delete(route('kategori.destroy',{
-                kategori:id
-            }),{
-                onSuccess: ()=>{
-                    this.notifikasi('Kategori Berhasil Dihapus')
-                    this.close_modal('hapus')
-                    this.hapus.reset()
+        submit_hapus() {
+            const { id } = this.hapus;
+            this.hapus.delete(
+                route("kategori.destroy", {
+                    kategori: id,
+                }),
+                {
+                    onSuccess: () => {
+                        this.notifikasi("Kategori Berhasil Dihapus");
+                        this.close_modal("hapus");
+                        this.hapus.reset();
+                    },
                 }
-            })
+            );
         },
         submit_tambah() {
             this.tambah.post(route("kategori.store"), {
                 onSuccess: () => {
                     this.notifikasi("Kategori Berhasil Disimpan");
                     this.close_modal("tambah");
-                    this.tambah.reset()
+                    this.tambah.reset();
                 },
             });
         },

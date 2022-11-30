@@ -1,5 +1,5 @@
 <template lang="">
-    <Navbar header :user="user" :success="success">
+    <Navbar :toko="toko" header :user="user" :success="success">
         <template v-slot:title> satuan </template>
         <template v-slot:title_left>
             <label for="tambah" class="btn btn-sm btn-success">
@@ -22,7 +22,11 @@
                     >
                         <td>{{ item.satuan }}</td>
                         <td class="flex justify-center gap-2">
-                            <label @click="get_satuan(item)" for="list" class="btn btn-sm btn-info">
+                            <label
+                                @click="get_satuan(item)"
+                                for="list"
+                                class="btn btn-sm btn-info"
+                            >
                                 <i class="fa fa-list"></i>
                             </label>
                             <label
@@ -54,8 +58,8 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in hapus.produk">
-                        <td>{{item.nama}}</td>
-                        <td>{{item.satuan.satuan}}</td>
+                        <td>{{ item.nama }}</td>
+                        <td>{{ item.satuan.satuan }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -119,6 +123,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 export default {
     props: {
         satuan: Array,
+        toko: Object,
     },
     setup() {
         const tambah = useForm({

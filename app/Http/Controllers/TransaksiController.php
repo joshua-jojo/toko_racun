@@ -163,7 +163,7 @@ class TransaksiController extends Controller
             'kembalian' => ($transaksi->bayar + $request->lunas['nominal']) - $request->grand_total,
             'bayar' => $request->lunas['nominal'] + $transaksi->bayar,
         ];
-        $final['status'] = $final['bayar'] < 0 ? 'belum lunas' : 'lunas';
+        $final['status'] = ($final['bayar'] - $transaksi->grand_total) < 0 ? 'belum lunas' : 'lunas';
         // dd($final, $request->all());
         $transaksi->update($final);
     }

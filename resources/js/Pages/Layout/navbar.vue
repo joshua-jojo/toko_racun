@@ -1,6 +1,10 @@
 <template lang="">
     <Head>
-        <title>{{ $inertia.page.component.toUpperCase() }}</title>
+        <title>
+            {{
+                `${$inertia.page.component.toUpperCase()} | ${toko.nama.toUpperCase()}`
+            }}
+        </title>
     </Head>
     <div class="min-h-screen relative">
         <div class="toast toast-top toast-end z-50" v-if="success">
@@ -19,9 +23,9 @@
         </div>
         <div class="navbar bg-base-100 shadow-lg sticky top-0 z-40">
             <div class="navbar-start">
-                <a class="btn btn-ghost normal-case text-xl no-animation"
-                    >daisyUI</a
-                >
+                <a class="btn btn-ghost text-xl no-animation uppercase">{{
+                    toko.nama
+                }}</a>
             </div>
             <div class="navbar-center hidden lg:flex">
                 <ul class="menu menu-horizontal p-0 capitalize gap-2">
@@ -162,23 +166,26 @@
                             >
                         </li>
                     </Link>
-                    <li>
-                        <a
-                            :class="{
-                                active: $inertia.page.component == 'pengaturan',
-                            }"
-                            ><i class="fa-solid fa-gear"></i>pengaturan</a
-                        >
-                    </li>
+                    <Link :href="route('settings.menu.index')">
+                        <li>
+                            <a
+                                :class="{
+                                    active:
+                                        $inertia.page.component == 'settings',
+                                }"
+                                ><i class="fa-solid fa-gear"></i>pengaturan</a
+                            >
+                        </li>
+                    </Link>
                 </ul>
             </div>
             <div class="navbar-end">
                 <div class="dropdown dropdown-end">
                     <label tabindex="0" class="btn btn-ghost avatar flex gap-2">
                         <div class="w-10 rounded-full">
-                            <img :src="$store.state.profiles.foto" />
+                            <img :src="user.foto" />
                         </div>
-                        {{ $store.state.profiles.name }}
+                        {{ user.name }}
                     </label>
                     <ul
                         tabindex="0"
@@ -219,6 +226,7 @@ export default {
     props: {
         header: Boolean,
         user: Object,
+        toko: Object,
         success: String,
     },
     created() {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
@@ -44,13 +45,13 @@ class HandleInertiaRequests extends Middleware
         if (Auth::check()) {
             $user = Auth::user();
             $user = [
+                'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
                 'lock' => $user->lock,
                 'foto' => url($user->foto),
             ];
         }
-        // dd($user);
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
@@ -62,6 +63,7 @@ class HandleInertiaRequests extends Middleware
             },
             'flash' =>  session()->get('respon'),
             'user' =>  $user,
+            'toko' =>  Toko::all()->first(),
         ]);
     }
 }

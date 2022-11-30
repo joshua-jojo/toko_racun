@@ -2,14 +2,15 @@
 
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MemberController;
-use App\Http\Controllers\PemasukkanController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\settings\SettingsController;
+use App\Http\Controllers\settings\TokoController;
+use App\Http\Controllers\settings\UserController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,11 @@ Route::group(['middleware' => ['login', 'lock_mode']], function () {
     Route::resource('pembelian', PembelianController::class);
     Route::resource('member', MemberController::class);
     Route::resource('supplier', SupplierController::class);
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::resource('menu', SettingsController::class);
+        Route::resource('toko', TokoController::class);
+        Route::resource('user', UserController::class);
+    });
 });
 
 Route::prefix('auth')->group(function () {

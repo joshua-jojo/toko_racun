@@ -1,5 +1,5 @@
 <template lang="">
-    <navbar header :success="success">
+    <navbar :toko="toko" header :success="success" :user="user">
         <template v-slot:title> Produk </template>
         <template v-slot:title_left>
             <label for="tambah" class="btn btn-sm btn-success">
@@ -391,6 +391,7 @@ export default {
         produk: Object,
         kategori: Object,
         satuan: Object,
+        toko: Object,
     },
     setup() {
         const hapus = useForm({

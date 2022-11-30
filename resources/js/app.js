@@ -19,11 +19,7 @@ import ModalMd from "./Pages/Component/modal-md.vue";
 import ModalLg from "./Pages/Component/modal-lg.vue";
 import { Inertia } from "@inertiajs/inertia";
 
-const appName =
-    window.document.getElementsByTagName("title")[0]?.innerText || "KOBA POS";
-
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.vue`,

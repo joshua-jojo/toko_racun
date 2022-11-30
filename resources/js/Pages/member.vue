@@ -1,5 +1,5 @@
 <template lang="">
-    <navbar header :success="success">
+    <navbar :toko="toko" header :success="success" :user="user">
         <template v-slot:title> Member </template>
         <template v-slot:title_left>
             <label for="tambah" class="btn btn-sm btn-success">
@@ -258,6 +258,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 export default {
     props: {
         member: Object,
+        toko: Object,
     },
     setup(props) {
         const tambah = useForm({

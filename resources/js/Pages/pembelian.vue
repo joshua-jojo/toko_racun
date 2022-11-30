@@ -1,5 +1,5 @@
 <template lang="">
-    <navbar header :success="success">
+    <navbar :toko="toko" header :success="success" :user="user">
         <template v-slot:title>Pembelian</template>
         <template v-slot:title_left>
             <label for="tambah" class="btn btn-sm btn-success">
@@ -750,6 +750,7 @@ export default {
         supplier: Array,
         produk: Array,
         master_pembelian: Object,
+        toko: Object,
     },
     data() {
         return {

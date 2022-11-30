@@ -1,5 +1,5 @@
 <template lang="">
-    <navbar header>
+    <navbar :toko="toko" header :user="user">
         <template v-slot:title> Transaksi </template>
         <template v-slot:content>
             <div class="flex flex-col w-full gap-5">
@@ -285,6 +285,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 export default {
     props: {
         transaksi: Object,
+        toko: Object,
     },
     watch: {
         "edit.lunas.jenis_pembayaran"() {

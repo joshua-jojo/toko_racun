@@ -1,4 +1,9 @@
 <template lang="">
+    <Head>
+        <title>
+            {{ `LOCK MODE | ${toko.nama.toUpperCase()}` }}
+        </title>
+    </Head>
     <div class="min-h-screen bg-base-100 flex justify-center items-center">
         <div class="modal-box w-11/12 max-w-5xl">
             <h3 class="font-bold text-3xl text-center">LOCK MODE</h3>
@@ -18,6 +23,9 @@
 import { useForm } from "@inertiajs/inertia-vue3";
 
 export default {
+    props: {
+        toko: Object,
+    },
     setup(props) {
         const unlock = useForm({
             password: null,
