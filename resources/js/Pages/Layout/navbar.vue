@@ -6,7 +6,9 @@
             }}
         </title>
     </Head>
-    <div class="min-h-screen relative">
+    <div
+        class="min-h-screen max-h-screen relative scrollbar-hide overflow-x-auto"
+    >
         <div class="toast toast-top toast-end z-50" v-if="success">
             <div class="alert alert-success">
                 <div>
@@ -198,25 +200,22 @@
                 </div>
             </div>
         </div>
-        <transition name="content">
-            <div class="h-full p-5 w-full flex flex-col gap-5" v-if="transisi">
-                <div class="flex gap-4 p-2 rounded-2xl" v-if="header">
-                    <div class="prose capitalize w-max pl-4">
-                        <h2><slot name="title"></slot></h2>
-                    </div>
-                    <slot name="title_left"></slot>
-                    <div class="flex justify-end w-full">
-                        <slot name="title_right"></slot>
-                    </div>
+        <div class="h-full p-5 w-full flex flex-col gap-5">
+            <div class="flex gap-4 p-2 rounded-2xl" v-if="header">
+                <div class="prose capitalize w-max pl-4">
+                    <h2><slot name="title"></slot></h2>
                 </div>
-
-                <div
-                    class="flex w-full h-full bg-base-100 shadow-lg rounded-lg p-4"
-                >
-                    <slot name="content"></slot>
+                <slot name="title_left"></slot>
+                <div class="flex justify-end w-full">
+                    <slot name="title_right"></slot>
                 </div>
             </div>
-        </transition>
+            <div
+                class="flex w-full h-full bg-base-100 shadow-lg rounded-lg p-4"
+            >
+                <slot name="content"></slot>
+            </div>
+        </div>
     </div>
 </template>
 <script>

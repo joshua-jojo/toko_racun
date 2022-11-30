@@ -18,6 +18,7 @@ import navbar from "./Pages/Layout/navbar.vue";
 import ModalMd from "./Pages/Component/modal-md.vue";
 import ModalLg from "./Pages/Component/modal-lg.vue";
 import { Inertia } from "@inertiajs/inertia";
+import VueApexCharts from "vue3-apexcharts";
 
 createInertiaApp({
     resolve: (name) =>
@@ -29,6 +30,7 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(store)
+            .use(VueApexCharts)
             .use(ZiggyVue, Ziggy)
             .use(AOS.init())
             .use(VueSweetalert2)

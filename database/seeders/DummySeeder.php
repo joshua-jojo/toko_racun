@@ -76,7 +76,7 @@ class DummySeeder extends Seeder
             $kembalian = $bayar - $grand_total;
             $status = $bayar - $grand_total < 0 ? "belum lunas" : "lunas";
             $rand_day = rand(-360, 360);
-            $created_at = date('Y-m-d', strtotime(date("Y-m-d") . ($rand_day < 0 ? "-" . $rand_day : "+" . $rand_day) . " days"));
+            $created_at = date('Y-m-d', strtotime(date("2022-01-01") . ($rand_day < 0 ? "-" . $rand_day : "+" . $rand_day) . " days"));
             $id = Transaksi::create([
                 'kode_transaksi' => $i,
                 'jumlah' => 0,
